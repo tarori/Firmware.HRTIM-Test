@@ -30,7 +30,7 @@ endif()
 
 # set compiler option
 set(COMPILER_OPT_FLAGS "-O3")
-set(COMMON_COMPILER_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -DUSE_HAL_DRIVER -DSTM32F334x8  -fdata-sections -ffunction-sections -Wall -Wextra ${COMPILER_OPT_FLAGS}")
+set(COMMON_COMPILER_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -DUSE_HAL_DRIVER -DSTM32F334x8  -fdata-sections -ffunction-sections -Wall -Wextra  -Wno-missing-field-initializers ${COMPILER_OPT_FLAGS}")
 set(CMAKE_C_FLAGS "${COMMON_COMPILER_FLAGS}")
 set(CMAKE_C_FLAGS_DEBUG "-g")
 set(CMAKE_FLAGS_RELEASE "")
@@ -54,16 +54,13 @@ endif()
 include_directories("Inc" "CubeMX/F334-Test/Core/Inc" "CubeMX/F334-Test/Drivers/CMSIS/Device/ST/STM32F3xx/Include" "CubeMX/F334-Test/Drivers/CMSIS/Include" "CubeMX/F334-Test/Drivers/STM32F3xx_HAL_Driver/Inc" "CubeMX/F334-Test/Drivers/STM32F3xx_HAL_Driver/Inc/Legacy")
 
 file(GLOB PERIPH_LIB_SOURCE "CubeMX/F334-Test/Core/Src/*.c" "CubeMX/F334-Test/Drivers/STM32F3xx_HAL_Driver/Src/*.c" "CubeMX/F334-Test/*.s")
-#list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_dma.c")
-#list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_rcc.c")
-
+list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/main.c")
+#list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/stm32F3xx_it.c")
 add_library(periph-lib STATIC ${PERIPH_LIB_SOURCE})
 
 set(CMAKE_EXE_LINKER_FLAGS "-mcpu=cortex-m4  -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -T ${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/STM32F334K8Tx_FLASH.ld -L. -lc -lm -u _printf_float -Wl,-Map=${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections -Wl,--print-memory-usage")
 
 file(GLOB MAIN_SOURCE "Src/*.cpp" "Src/*.c")
-#list(REMOVE_ITEM MAIN_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/main.c")
-#list(REMOVE_ITEM MAIN_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/stm32F3xx_it.c")
 
 add_executable(${PROJECT_NAME}.elf ${MAIN_SOURCE})
 target_link_libraries(${PROJECT_NAME}.elf periph-lib)

@@ -99,6 +99,7 @@ void _exit(int status)
     }
 }
 
+/* utils.cppで定義
 int _write(int file, char* ptr, int len)
 {
     (void)file;
@@ -109,6 +110,7 @@ int _write(int file, char* ptr, int len)
     }
     return len;
 }
+*/
 
 int _close(int file)
 {
