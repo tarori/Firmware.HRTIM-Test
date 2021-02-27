@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.9)
 
 set(CMAKE_SYSTEM_NAME Generic)
-
-include(CMakeForceCompiler)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+string(ASCII 27 Esc)
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc CACHE STRING "arm-none-eabi-gcc" FORCE)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++ CACHE STRING "arm-none-eabi-g++" FORCE)
@@ -14,9 +14,6 @@ set(OBJCOPY arm-none-eabi-objcopy CACHE STRING "arm-none-eabi-objcopy" FORCE)
 set(OBJDUMP arm-none-eabi-objdump CACHE STRING "arm-none-eabi-objdump" FORCE)
 set(READELF arm-none-eabi-readelf CACHE STRING "arm-none-eabi-readelf" FORCE)
 set(CMAKE_RANLIB arm-none-eabi-ranlib CACHE STRING "arm-none-eabi-ranlib" FORCE)
-
-CMAKE_FORCE_C_COMPILER(arm-none-eabi-gcc GNU)
-CMAKE_FORCE_CXX_COMPILER(arm-none-eabi-g++ GNU)
 
 enable_language(C)
 enable_language(CXX)
@@ -55,7 +52,7 @@ include_directories("Inc" "CubeMX/F334-Test/Core/Inc" "CubeMX/F334-Test/Drivers/
 
 file(GLOB PERIPH_LIB_SOURCE "CubeMX/F334-Test/Core/Src/*.c" "CubeMX/F334-Test/Drivers/STM32F3xx_HAL_Driver/Src/*.c" "CubeMX/F334-Test/*.s")
 list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/main.c")
-#list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/stm32F3xx_it.c")
+list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/stm32F3xx_it.c")
 add_library(periph-lib STATIC ${PERIPH_LIB_SOURCE})
 
 set(CMAKE_EXE_LINKER_FLAGS "-mcpu=cortex-m4  -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -T ${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/STM32F334K8Tx_FLASH.ld -L. -lc -lm -u _printf_float -Wl,-Map=${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections -Wl,--print-memory-usage")
