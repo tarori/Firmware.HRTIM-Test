@@ -95,7 +95,7 @@ int main(void)
     /* USER CODE BEGIN 2 */
     init_common();
     printf("Hello\n");
-
+    HAL_HRTIM_SimplePWMStart(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1);
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -144,7 +144,7 @@ void SystemClock_Config(void)
     }
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_HRTIM1 | RCC_PERIPHCLK_USART1;
     PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK1;
-    PeriphClkInit.Hrtim1ClockSelection = RCC_HRTIM1CLK_HCLK;
+    PeriphClkInit.Hrtim1ClockSelection = RCC_HRTIM1CLK_PLLCLK;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
         Error_Handler();
     }

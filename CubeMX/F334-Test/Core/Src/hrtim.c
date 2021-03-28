@@ -36,7 +36,7 @@ void MX_HRTIM1_Init(void)
 
   HRTIM_TimeBaseCfgTypeDef pTimeBaseCfg = {0};
   HRTIM_TimerCfgTypeDef pTimerCfg = {0};
-  HRTIM_SimpleOCChannelCfgTypeDef pSimpleOCChannelCfg = {0};
+  HRTIM_SimplePWMChannelCfgTypeDef pSimplePWMChannelCfg = {0};
 
   /* USER CODE BEGIN HRTIM1_Init 1 */
 
@@ -48,9 +48,17 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
-  pTimeBaseCfg.Period = 0xFFFD;
+  if (HAL_HRTIM_DLLCalibrationStart(&hhrtim1, HRTIM_CALIBRATIONRATE_14) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_HRTIM_PollForDLLCalibration(&hhrtim1, 10) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  pTimeBaseCfg.Period = 10000-1;
   pTimeBaseCfg.RepetitionCounter = 0x00;
-  pTimeBaseCfg.PrescalerRatio = HRTIM_PRESCALERRATIO_DIV1;
+  pTimeBaseCfg.PrescalerRatio = HRTIM_PRESCALERRATIO_MUL32;
   pTimeBaseCfg.Mode = HRTIM_MODE_CONTINUOUS;
   if (HAL_HRTIM_TimeBaseConfig(&hhrtim1, HRTIM_TIMERINDEX_MASTER, &pTimeBaseCfg) != HAL_OK)
   {
@@ -73,15 +81,15 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
+  pTimeBaseCfg.Period = 10000;
   if (HAL_HRTIM_TimeBaseConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, &pTimeBaseCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  pSimpleOCChannelCfg.Mode = HRTIM_BASICOCMODE_TOGGLE;
-  pSimpleOCChannelCfg.Pulse = 0xFFFD;
-  pSimpleOCChannelCfg.Polarity = HRTIM_OUTPUTPOLARITY_HIGH;
-  pSimpleOCChannelCfg.IdleLevel = HRTIM_OUTPUTIDLELEVEL_INACTIVE;
-  if (HAL_HRTIM_SimpleOCChannelConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1, &pSimpleOCChannelCfg) != HAL_OK)
+  pSimplePWMChannelCfg.Pulse = 5000;
+  pSimplePWMChannelCfg.Polarity = HRTIM_OUTPUTPOLARITY_HIGH;
+  pSimplePWMChannelCfg.IdleLevel = HRTIM_OUTPUTIDLELEVEL_INACTIVE;
+  if (HAL_HRTIM_SimplePWMChannelConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1, &pSimplePWMChannelCfg) != HAL_OK)
   {
     Error_Handler();
   }
