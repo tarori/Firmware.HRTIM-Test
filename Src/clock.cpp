@@ -82,5 +82,6 @@ void SysTick_Handler()
         return;
     }
     cycle_callback();
+    HAL_IncTick();
 }
 }  // extern "C"
