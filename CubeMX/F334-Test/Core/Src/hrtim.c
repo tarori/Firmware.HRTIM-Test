@@ -93,6 +93,12 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
+  pSimplePWMChannelCfg.Pulse = 0xFFDF;
+  pSimplePWMChannelCfg.Polarity = HRTIM_OUTPUTPOLARITY_LOW;
+  if (HAL_HRTIM_SimplePWMChannelConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA2, &pSimplePWMChannelCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN HRTIM1_Init 2 */
 
   /* USER CODE END HRTIM1_Init 2 */
@@ -129,8 +135,9 @@ void HAL_HRTIM_MspPostInit(HRTIM_HandleTypeDef* hrtimHandle)
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**HRTIM1 GPIO Configuration
     PA8     ------> HRTIM1_CHA1
+    PA9     ------> HRTIM1_CHA2
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_8;
+    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
