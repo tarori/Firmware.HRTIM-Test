@@ -94,8 +94,9 @@ int main(void)
     MX_HRTIM1_Init();
     /* USER CODE BEGIN 2 */
     init_common();
+
+    HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TA1);
     printf("Hello\n");
-    HAL_HRTIM_SimplePWMStart(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1);
     /* USER CODE END 2 */
 
     /* Infinite loop */
