@@ -4,3 +4,4 @@
 #include <cstdint>
 
 void cycle_callback();
+void main_loop();

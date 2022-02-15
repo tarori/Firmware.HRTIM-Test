@@ -28,6 +28,7 @@
 #include "utils.hpp"
 #include <cstdint>
 #include <stdio.h>
+#include "main_cycle.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,7 +48,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-extern bool callback_start;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -92,13 +92,8 @@ int main(void)
     MX_USART1_UART_Init();
     MX_HRTIM1_Init();
     /* USER CODE BEGIN 2 */
-    init_common();
 
-    HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TA1 | HRTIM_OUTPUT_TA2);
-    HAL_HRTIM_WaveformCountStart(&hhrtim1, HRTIM_TIMERID_TIMER_A);
-    printf("Hello\n");
-
-    callback_start = true;
+    main_loop();
 
     /* USER CODE END 2 */
 
