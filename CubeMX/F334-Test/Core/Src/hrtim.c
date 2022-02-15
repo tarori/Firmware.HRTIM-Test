@@ -37,6 +37,7 @@ void MX_HRTIM1_Init(void)
   HRTIM_TimeBaseCfgTypeDef pTimeBaseCfg = {0};
   HRTIM_TimerCfgTypeDef pTimerCfg = {0};
   HRTIM_CompareCfgTypeDef pCompareCfg = {0};
+  HRTIM_DeadTimeCfgTypeDef pDeadTimeCfg = {0};
   HRTIM_OutputCfgTypeDef pOutputCfg = {0};
 
   /* USER CODE BEGIN HRTIM1_Init 1 */
@@ -57,7 +58,7 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
-  pTimeBaseCfg.Period = 10000-1;
+  pTimeBaseCfg.Period = 40960;
   pTimeBaseCfg.RepetitionCounter = 0x00;
   pTimeBaseCfg.PrescalerRatio = HRTIM_PRESCALERRATIO_MUL32;
   pTimeBaseCfg.Mode = HRTIM_MODE_CONTINUOUS;
@@ -82,7 +83,6 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
-  pTimeBaseCfg.Period = 10000;
   if (HAL_HRTIM_TimeBaseConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, &pTimeBaseCfg) != HAL_OK)
   {
     Error_Handler();
@@ -93,7 +93,7 @@ void MX_HRTIM1_Init(void)
   pTimerCfg.PushPull = HRTIM_TIMPUSHPULLMODE_DISABLED;
   pTimerCfg.FaultEnable = HRTIM_TIMFAULTENABLE_NONE;
   pTimerCfg.FaultLock = HRTIM_TIMFAULTLOCK_READWRITE;
-  pTimerCfg.DeadTimeInsertion = HRTIM_TIMDEADTIMEINSERTION_DISABLED;
+  pTimerCfg.DeadTimeInsertion = HRTIM_TIMDEADTIMEINSERTION_ENABLED;
   pTimerCfg.DelayedProtectionMode = HRTIM_TIMER_A_B_C_DELAYEDPROTECTION_DISABLED;
   pTimerCfg.UpdateTrigger = HRTIM_TIMUPDATETRIGGER_NONE;
   pTimerCfg.ResetTrigger = HRTIM_TIMRESETTRIGGER_NONE;
@@ -102,8 +102,29 @@ void MX_HRTIM1_Init(void)
   {
     Error_Handler();
   }
-  pCompareCfg.CompareValue = 5000;
+  pCompareCfg.CompareValue = 96;
   if (HAL_HRTIM_WaveformCompareConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_1, &pCompareCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  pCompareCfg.CompareValue = 5000;
+  pCompareCfg.AutoDelayedMode = HRTIM_AUTODELAYEDMODE_REGULAR;
+  pCompareCfg.AutoDelayedTimeout = 0x0000;
+
+  if (HAL_HRTIM_WaveformCompareConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_2, &pCompareCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  pDeadTimeCfg.Prescaler = HRTIM_TIMDEADTIME_PRESCALERRATIO_MUL8;
+  pDeadTimeCfg.RisingValue = 511;
+  pDeadTimeCfg.RisingSign = HRTIM_TIMDEADTIME_RISINGSIGN_POSITIVE;
+  pDeadTimeCfg.RisingLock = HRTIM_TIMDEADTIME_RISINGLOCK_WRITE;
+  pDeadTimeCfg.RisingSignLock = HRTIM_TIMDEADTIME_RISINGSIGNLOCK_WRITE;
+  pDeadTimeCfg.FallingValue = 511;
+  pDeadTimeCfg.FallingSign = HRTIM_TIMDEADTIME_FALLINGSIGN_POSITIVE;
+  pDeadTimeCfg.FallingLock = HRTIM_TIMDEADTIME_FALLINGLOCK_WRITE;
+  pDeadTimeCfg.FallingSignLock = HRTIM_TIMDEADTIME_FALLINGSIGNLOCK_WRITE;
+  if (HAL_HRTIM_DeadTimeConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, &pDeadTimeCfg) != HAL_OK)
   {
     Error_Handler();
   }
