@@ -16,14 +16,14 @@ void clock_init()
     HAL_NVIC_SetPriority(SysTick_IRQn, 4, 0);
 }
 
-std::uint32_t get_systick_value()
+uint32_t get_systick_value()
 {
     return SysTick->VAL;
 }
 
 // 新旧のSysTickの値から経過したクロックを数える
 // SysTickの値はカウントダウンされていくことに注意
-inline std::uint32_t calc_elapsed_clock(std::uint32_t new_systick, std::uint32_t old_systick)
+inline uint32_t calc_elapsed_clock(uint32_t new_systick, uint32_t old_systick)
 {
     if (old_systick > new_systick) {
         return old_systick - new_systick;
@@ -37,7 +37,7 @@ inline std::uint32_t calc_elapsed_clock(std::uint32_t new_systick, std::uint32_t
  *
  * \param[in] ms ミリ秒単位の待ち時間
  */
-void delay_ms(std::uint32_t ms)
+void delay_ms(uint32_t ms)
 {
     delay_us(1000 * ms);
 }
@@ -47,7 +47,7 @@ void delay_ms(std::uint32_t ms)
  *
  * \param[in] us マイクロ秒単位の待ち時間
  */
-void delay_us(std::uint32_t us)
+void delay_us(uint32_t us)
 {
     uint32_t old_clock = get_systick_value();
     uint32_t delay_clock = us * (SystemCoreClock / 1000 / 1000);
@@ -71,4 +71,19 @@ void SysTick_Handler()
     cycle_callback();
     HAL_IncTick();
 }
+
+/**
+ * @brief This function handles HRTIM timer A global interrupt.
+ */
+void HRTIM1_TIMA_IRQHandler(void)
+{
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
+    // GPIOB->BSRR = GPIO_PIN_1;
+    HAL_HRTIM_IRQHandler(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A);
+    // __HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_TIM_IT_UPD);
+    // GPIOB->BRR = GPIO_PIN_1;
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
+    // HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_1);
+}
+
 }  // extern "C"

@@ -52,7 +52,7 @@ include_directories("Inc" "CubeMX/F334-Test/Core/Inc" "CubeMX/F334-Test/Drivers/
 
 file(GLOB PERIPH_LIB_SOURCE "CubeMX/F334-Test/Core/Src/*.c" "CubeMX/F334-Test/Drivers/STM32F3xx_HAL_Driver/Src/*.c" "CubeMX/F334-Test/*.s")
 list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/main.c")
-list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/stm32F3xx_it.c")
+list(REMOVE_ITEM PERIPH_LIB_SOURCE "${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/Core/Src/stm32f3xx_it.c")
 add_library(periph-lib STATIC ${PERIPH_LIB_SOURCE})
 
 set(CMAKE_EXE_LINKER_FLAGS "-mcpu=cortex-m4  -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -T ${CMAKE_SOURCE_DIR}/CubeMX/F334-Test/STM32F334K8Tx_FLASH.ld -L. -lc -lm -u _printf_float -Wl,-Map=${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections -Wl,--print-memory-usage")
