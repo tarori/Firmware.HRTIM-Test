@@ -30,6 +30,7 @@ void HAL_HRTIM_Set_Compare(HRTIM_HandleTypeDef* hhrtim, uint32_t TimerIdx, uint3
         break;
     }
     }
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_1);
 }
 
 extern "C" {

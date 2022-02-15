@@ -9,10 +9,7 @@ void cycle_callback()
     ++counter;
     if (counter % 1000 < 500) {
         HAL_HRTIM_Set_Compare(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1, 1000);
-
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
     } else {
-        HAL_HRTIM_Set_Compare(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1, 2000);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
+        HAL_HRTIM_Set_Compare(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1, 7000);
     }
 }
